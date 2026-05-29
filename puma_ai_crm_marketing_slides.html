@@ -1,0 +1,1454 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>彪马 AI赋能CRM与营销合作方案</title>
+  <style>
+    :root {
+      --bg: #080808;
+      --paper: #f5f2ea;
+      --ink: #111111;
+      --muted: #706d66;
+      --line: rgba(17, 17, 17, 0.14);
+      --red: #d81622;
+      --red-dark: #a90f18;
+      --charcoal: #1b1b1b;
+      --steel: #637078;
+      --mint: #2c8c7d;
+      --amber: #c58628;
+      --blue: #285a8f;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.22);
+      --radius: 8px;
+      font-family: "Inter", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    body {
+      overflow: hidden;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      background:
+        linear-gradient(115deg, rgba(216, 22, 34, 0.22), transparent 28%),
+        radial-gradient(circle at 84% 12%, rgba(255, 255, 255, 0.12), transparent 26%),
+        #070707;
+      padding: 22px;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 22px;
+      display: none;
+      overflow: hidden;
+      background: var(--paper);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      padding: 54px 62px 46px;
+    }
+
+    .slide.active {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 28px;
+      animation: slideReveal 520ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
+    }
+
+    .slide.dark {
+      background: #0d0d0d;
+      color: #f7f3ea;
+    }
+
+    .slide.red {
+      background: #d81622;
+      color: #fff8ef;
+    }
+
+    .kicker {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--red);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .dark .kicker,
+    .red .kicker {
+      color: #fff8ef;
+    }
+
+    .kicker::before {
+      content: "";
+      width: 34px;
+      height: 3px;
+      background: currentColor;
+      border-radius: 99px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(42px, 5vw, 72px);
+      line-height: 1.05;
+      font-weight: 900;
+      letter-spacing: 0;
+      max-width: 950px;
+    }
+
+    h2 {
+      font-size: clamp(34px, 4vw, 54px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: 0;
+      max-width: 980px;
+    }
+
+    h3 {
+      font-size: 22px;
+      line-height: 1.25;
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      font-size: clamp(20px, 2.15vw, 30px);
+      line-height: 1.45;
+      color: #3a3935;
+      max-width: 960px;
+      font-weight: 650;
+    }
+
+    .dark .lead,
+    .red .lead {
+      color: rgba(255, 248, 239, 0.82);
+    }
+
+    .content {
+      min-height: 0;
+      display: grid;
+      align-items: center;
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: rgba(17, 17, 17, 0.56);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .dark .footer,
+    .red .footer {
+      color: rgba(255, 248, 239, 0.64);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 950;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 19px;
+      border: 3px solid currentColor;
+      border-left-width: 9px;
+      transform: skewX(-18deg);
+    }
+
+    .title-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 44px;
+      align-items: center;
+    }
+
+    .hero-copy {
+      display: grid;
+      gap: 28px;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .pill {
+      border: 1px solid rgba(255, 248, 239, 0.22);
+      background: rgba(255, 255, 255, 0.06);
+      color: inherit;
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .hero-art {
+      position: relative;
+      aspect-ratio: 0.74;
+      min-height: 420px;
+      border: 1px solid rgba(255, 248, 239, 0.16);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background:
+        linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.01)),
+        #161616;
+    }
+
+    .hero-art::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent 0 18%, rgba(255, 255, 255, 0.08) 18% 19%, transparent 19% 40%, rgba(255, 255, 255, 0.08) 40% 41%, transparent 41% 66%, rgba(255, 255, 255, 0.08) 66% 67%, transparent 67%),
+        linear-gradient(0deg, transparent 0 13%, rgba(255, 255, 255, 0.07) 13% 14%, transparent 14% 39%, rgba(255, 255, 255, 0.07) 39% 40%, transparent 40% 71%, rgba(255, 255, 255, 0.07) 71% 72%, transparent 72%);
+      animation: gridDrift 12s linear infinite;
+    }
+
+    .signal-line {
+      position: absolute;
+      left: 34px;
+      right: 34px;
+      height: 5px;
+      background: var(--red);
+      border-radius: 999px;
+      transform-origin: left center;
+      box-shadow: 0 0 28px rgba(216, 22, 34, 0.62);
+      opacity: 0;
+      animation: signalDraw 900ms cubic-bezier(0.24, 0.78, 0.24, 1) both;
+    }
+
+    .signal-line.one {
+      top: 31%;
+      transform: rotate(-14deg);
+    }
+
+    .signal-line.two {
+      top: 52%;
+      transform: rotate(17deg);
+      background: #f0d8a8;
+      box-shadow: 0 0 22px rgba(240, 216, 168, 0.46);
+      animation-delay: 180ms;
+    }
+
+    .signal-line.three {
+      top: 68%;
+      transform: rotate(-8deg);
+      width: 74%;
+      animation-delay: 320ms;
+    }
+
+    .node {
+      position: absolute;
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #f7f3ea;
+      color: #111;
+      font-size: 13px;
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.1;
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.28);
+      animation: nodePulse 3.2s ease-in-out infinite;
+    }
+
+    .node.a {
+      top: 17%;
+      left: 10%;
+    }
+
+    .node.b {
+      top: 42%;
+      right: 12%;
+      animation-delay: 450ms;
+    }
+
+    .node.c {
+      bottom: 11%;
+      left: 22%;
+      animation-delay: 900ms;
+    }
+
+    .big-number {
+      font-size: clamp(58px, 7vw, 98px);
+      font-weight: 950;
+      line-height: 0.95;
+      letter-spacing: 0;
+      color: var(--red);
+    }
+
+    .dark .big-number {
+      color: #fff8ef;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .split.wide-left {
+      grid-template-columns: 1.18fr 0.82fr;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card-grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card-grid.four {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.48);
+      display: grid;
+      gap: 12px;
+      min-height: 148px;
+      transform: translateY(10px);
+      opacity: 0;
+    }
+
+    .dark .card {
+      border-color: rgba(255, 248, 239, 0.16);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .card p,
+    .text {
+      font-size: 17px;
+      line-height: 1.55;
+      color: #514f49;
+      font-weight: 600;
+    }
+
+    .dark .card p,
+    .dark .text {
+      color: rgba(255, 248, 239, 0.72);
+    }
+
+    .tag {
+      width: fit-content;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: rgba(216, 22, 34, 0.11);
+      color: var(--red);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .metric {
+      min-height: 166px;
+      border-radius: var(--radius);
+      padding: 18px;
+      background: #111;
+      color: #fff8ef;
+      display: grid;
+      align-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .metric::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 20px;
+      height: 8px;
+      background: linear-gradient(90deg, var(--red), #f0d8a8);
+      border-radius: 999px;
+      opacity: 0.85;
+      transform-origin: left center;
+      animation: barGrow 900ms 220ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
+    }
+
+    .metric small {
+      position: relative;
+      z-index: 1;
+      color: rgba(255, 248, 239, 0.7);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .metric strong {
+      position: relative;
+      z-index: 1;
+      font-size: 27px;
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .flow-step {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      min-height: 178px;
+      background: rgba(255, 255, 255, 0.52);
+      opacity: 0;
+      transform: translateX(-12px);
+    }
+
+    .flow-step::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -13px;
+      width: 12px;
+      height: 12px;
+      border-top: 3px solid var(--red);
+      border-right: 3px solid var(--red);
+      transform: translateY(-50%) rotate(45deg);
+      animation: arrowNudge 1.4s ease-in-out infinite;
+    }
+
+    .flow-step:last-child::after {
+      display: none;
+    }
+
+    .flow-step b {
+      display: block;
+      color: var(--red);
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    .flow-step p {
+      margin-top: 10px;
+      color: #55524c;
+      font-weight: 650;
+      line-height: 1.45;
+    }
+
+    .matrix {
+      display: grid;
+      gap: 12px;
+    }
+
+    .matrix-row {
+      display: grid;
+      grid-template-columns: 0.72fr 1.3fr 1.12fr;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.44);
+    }
+
+    .matrix-row > div {
+      padding: 16px 18px;
+      border-left: 1px solid var(--line);
+      font-size: 16px;
+      line-height: 1.42;
+      font-weight: 650;
+      color: #4c4944;
+    }
+
+    .matrix-row > div:first-child {
+      border-left: none;
+      color: var(--ink);
+      font-weight: 900;
+    }
+
+    .matrix-row.head {
+      background: #111;
+    }
+
+    .matrix-row.head > div {
+      color: #fff8ef;
+      border-color: rgba(255, 248, 239, 0.18);
+      font-weight: 850;
+    }
+
+    .architecture {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .layer-box {
+      display: grid;
+      gap: 12px;
+    }
+
+    .layer {
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      color: #fff8ef;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 76px;
+    }
+
+    .layer:nth-child(1) {
+      background: var(--red);
+    }
+
+    .layer:nth-child(2) {
+      background: #262626;
+    }
+
+    .layer:nth-child(3) {
+      background: #4a4a4a;
+    }
+
+    .layer b {
+      font-size: 21px;
+    }
+
+    .layer span {
+      color: rgba(255, 248, 239, 0.74);
+      font-weight: 700;
+    }
+
+    .usecase-map {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .usecase {
+      border: 1px solid rgba(17, 17, 17, 0.12);
+      border-radius: var(--radius);
+      padding: 16px;
+      min-height: 116px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .usecase b {
+      color: var(--red);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .case-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .case {
+      min-height: 260px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 14px;
+      padding: 20px;
+      border-radius: var(--radius);
+      color: #fff8ef;
+      background: #111;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .case::before {
+      content: "";
+      position: absolute;
+      inset: auto -30px -40px auto;
+      width: 150px;
+      height: 150px;
+      border: 28px solid rgba(255, 255, 255, 0.11);
+      transform: rotate(25deg);
+      animation: caseRing 5.5s ease-in-out infinite;
+    }
+
+    .case:nth-child(2) {
+      background: var(--blue);
+    }
+
+    .case:nth-child(3) {
+      background: var(--mint);
+    }
+
+    .case:nth-child(4) {
+      background: var(--red);
+    }
+
+    .case p {
+      color: rgba(255, 248, 239, 0.78);
+      font-weight: 650;
+      line-height: 1.45;
+    }
+
+    .quote {
+      border-left: 7px solid var(--red);
+      padding-left: 24px;
+      font-size: clamp(28px, 3vw, 42px);
+      line-height: 1.22;
+      font-weight: 900;
+      max-width: 980px;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .action-list {
+      counter-reset: action;
+      display: grid;
+      gap: 14px;
+    }
+
+    .action {
+      counter-increment: action;
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 16px;
+      align-items: start;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.52);
+      opacity: 0;
+      transform: translateX(-12px);
+    }
+
+    .action::before {
+      content: counter(action, decimal-leading-zero);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--red);
+      color: #fff8ef;
+      font-size: 15px;
+      font-weight: 950;
+    }
+
+    .action p {
+      margin-top: 6px;
+      color: #55524c;
+      line-height: 1.45;
+      font-weight: 650;
+    }
+
+    .decision-box {
+      background: #111;
+      color: #fff8ef;
+      border-radius: var(--radius);
+      padding: 26px;
+      display: grid;
+      align-content: center;
+      gap: 18px;
+    }
+
+    .decision-box strong {
+      font-size: 38px;
+      line-height: 1.08;
+      color: #fff8ef;
+    }
+
+    .decision-box p {
+      color: rgba(255, 248, 239, 0.76);
+      font-weight: 650;
+      line-height: 1.5;
+    }
+
+    .controls {
+      position: fixed;
+      right: 34px;
+      bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 20;
+    }
+
+    .nav-btn {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(0, 0, 0, 0.56);
+      color: #fff;
+      border-radius: 50%;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 21px;
+      line-height: 1;
+    }
+
+    .nav-btn:hover {
+      background: var(--red);
+    }
+
+    .progress {
+      position: fixed;
+      left: 22px;
+      right: 22px;
+      bottom: 0;
+      height: 5px;
+      z-index: 30;
+      background: rgba(255, 255, 255, 0.13);
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: var(--red);
+      transition: width 180ms ease;
+    }
+
+    .slide.active .kicker,
+    .slide.active h1,
+    .slide.active h2,
+    .slide.active .lead,
+    .slide.active .quote,
+    .slide.active .decision-box,
+    .slide.active .hero-art,
+    .slide.active .matrix-row,
+    .slide.active .layer,
+    .slide.active .footer {
+      animation: contentRise 620ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
+    }
+
+    .slide.active h1,
+    .slide.active h2 {
+      animation-delay: 80ms;
+    }
+
+    .slide.active .lead,
+    .slide.active .quote {
+      animation-delay: 160ms;
+    }
+
+    .slide.active .hero-art,
+    .slide.active .decision-box {
+      animation-delay: 220ms;
+    }
+
+    .slide.active .footer {
+      animation-delay: 360ms;
+    }
+
+    .slide.active .card,
+    .slide.active .usecase,
+    .slide.active .case,
+    .slide.active .flow-step,
+    .slide.active .action {
+      animation: contentRise 560ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
+    }
+
+    .slide.active .card:nth-child(1),
+    .slide.active .usecase:nth-child(1),
+    .slide.active .case:nth-child(1),
+    .slide.active .flow-step:nth-child(1),
+    .slide.active .action:nth-child(1),
+    .slide.active .matrix-row:nth-child(1),
+    .slide.active .layer:nth-child(1) {
+      animation-delay: 80ms;
+    }
+
+    .slide.active .card:nth-child(2),
+    .slide.active .usecase:nth-child(2),
+    .slide.active .case:nth-child(2),
+    .slide.active .flow-step:nth-child(2),
+    .slide.active .action:nth-child(2),
+    .slide.active .matrix-row:nth-child(2),
+    .slide.active .layer:nth-child(2) {
+      animation-delay: 160ms;
+    }
+
+    .slide.active .card:nth-child(3),
+    .slide.active .usecase:nth-child(3),
+    .slide.active .case:nth-child(3),
+    .slide.active .flow-step:nth-child(3),
+    .slide.active .action:nth-child(3),
+    .slide.active .matrix-row:nth-child(3),
+    .slide.active .layer:nth-child(3) {
+      animation-delay: 240ms;
+    }
+
+    .slide.active .card:nth-child(4),
+    .slide.active .usecase:nth-child(4),
+    .slide.active .case:nth-child(4),
+    .slide.active .flow-step:nth-child(4),
+    .slide.active .action:nth-child(4),
+    .slide.active .matrix-row:nth-child(4) {
+      animation-delay: 320ms;
+    }
+
+    .slide.active .matrix-row:nth-child(5) {
+      animation-delay: 400ms;
+    }
+
+    .slide.active .big-number {
+      animation: numberPop 680ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
+    }
+
+    .slide.active .metric {
+      animation: contentRise 620ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
+    }
+
+    .slide.active .metric:nth-child(1) {
+      animation-delay: 90ms;
+    }
+
+    .slide.active .metric:nth-child(2) {
+      animation-delay: 180ms;
+    }
+
+    .slide.active .metric:nth-child(3) {
+      animation-delay: 270ms;
+    }
+
+    .slide.active .metric:nth-child(4) {
+      animation-delay: 360ms;
+    }
+
+    @keyframes slideReveal {
+      from {
+        opacity: 0;
+        transform: scale(0.992);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes contentRise {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes numberPop {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.94);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes signalDraw {
+      from {
+        opacity: 0;
+        clip-path: inset(0 100% 0 0);
+      }
+      to {
+        opacity: 1;
+        clip-path: inset(0 0 0 0);
+      }
+    }
+
+    @keyframes nodePulse {
+      0%,
+      100% {
+        transform: translateY(0) scale(1);
+      }
+      50% {
+        transform: translateY(-4px) scale(1.035);
+      }
+    }
+
+    @keyframes gridDrift {
+      from {
+        background-position: 0 0, 0 0;
+      }
+      to {
+        background-position: 34px 0, 0 34px;
+      }
+    }
+
+    @keyframes barGrow {
+      from {
+        transform: scaleX(0);
+      }
+      to {
+        transform: scaleX(1);
+      }
+    }
+
+    @keyframes arrowNudge {
+      0%,
+      100% {
+        transform: translate(-2px, -50%) rotate(45deg);
+      }
+      50% {
+        transform: translate(3px, -50%) rotate(45deg);
+      }
+    }
+
+    @keyframes caseRing {
+      0%,
+      100% {
+        transform: rotate(25deg) translate(0, 0);
+      }
+      50% {
+        transform: rotate(31deg) translate(-6px, -4px);
+      }
+    }
+
+    @media (max-width: 900px) {
+      body {
+        overflow: auto;
+      }
+
+      .deck {
+        height: auto;
+        min-height: 100vh;
+        padding: 12px;
+      }
+
+      .slide,
+      .slide.active {
+        position: relative;
+        inset: auto;
+        min-height: calc(100vh - 24px);
+        padding: 28px 24px;
+      }
+
+      .title-grid,
+      .split,
+      .split.wide-left,
+      .architecture,
+      .action-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card-grid,
+      .card-grid.two,
+      .card-grid.four,
+      .metric-row,
+      .flow,
+      .case-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .matrix-row {
+        grid-template-columns: 1fr;
+      }
+
+      .matrix-row > div {
+        border-left: none;
+        border-top: 1px solid var(--line);
+      }
+
+      .matrix-row > div:first-child {
+        border-top: none;
+      }
+
+      .hero-art {
+        min-height: 300px;
+      }
+
+      .controls,
+      .progress {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+        overflow: visible;
+      }
+
+      .deck {
+        padding: 0;
+        background: white;
+      }
+
+      .slide,
+      .slide.active {
+        display: grid;
+        position: relative;
+        inset: auto;
+        width: 100vw;
+        height: 56.25vw;
+        max-height: 100vh;
+        page-break-after: always;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .controls,
+      .progress {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-live="polite">
+    <section class="slide dark active" data-title="封面">
+      <header class="kicker">CEO Briefing | AI x CRM x Marketing</header>
+      <div class="content title-grid">
+        <div class="hero-copy">
+          <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span>PUMA 大中华区</span></div>
+          <h1>AI赋能CRM与营销合作方案</h1>
+          <p class="lead">从会员数据洞察到一客一策运营，帮助彪马把AI能力转化为增长、效率与决策优势。</p>
+          <div class="meta-row">
+            <span class="pill">面向 Marketing 决策层</span>
+            <span class="pill">POC先行</span>
+            <span class="pill">数据安全可控</span>
+          </div>
+        </div>
+        <div class="hero-art" role="img" aria-label="AI数据网络视觉">
+          <span class="signal-line one"></span>
+          <span class="signal-line two"></span>
+          <span class="signal-line three"></span>
+          <span class="node a">CRM<br>会员</span>
+          <span class="node b">AI<br>洞察</span>
+          <span class="node c">营销<br>增长</span>
+        </div>
+      </div>
+      <footer class="footer"><span>基于双方 2026.05.14 首次正式交流</span><span>01</span></footer>
+    </section>
+
+    <section class="slide" data-title="核心结论">
+      <header class="kicker">Executive Takeaway</header>
+      <div class="content split wide-left">
+        <div class="stack">
+          <h2>建议以「会员画像对撞」作为第一步，快速验证AI对业务决策的价值。</h2>
+          <p class="lead">本次汇报不只是介绍AI工具，而是推动一个可衡量、可控风险、可扩展的增长项目。</p>
+        </div>
+        <div class="stack">
+          <div class="card">
+            <span class="tag">为什么现在</span>
+            <h3>行业正在从经验运营转向数据驱动运营</h3>
+            <p>头部消费品牌已把AI用于人群洞察、内容生产和自动化触达，窗口期正在收窄。</p>
+          </div>
+          <div class="card">
+            <span class="tag">怎么开始</span>
+            <h3>1-2个月POC，先看洞察和转化机会</h3>
+            <p>用小范围数据验证价值，再决定系统搭建、预算投入和长期路线。</p>
+          </div>
+        </div>
+      </div>
+      <footer class="footer"><span>目标：推动项目立项与合作启动</span><span>02</span></footer>
+    </section>
+
+    <section class="slide red" data-title="战略问题">
+      <header class="kicker">Strategic Question</header>
+      <div class="content">
+        <div class="stack">
+          <div class="quote">当消费者触点越来越分散，品牌仍依赖人工经验做会员运营，增长速度会被运营能力锁住。</div>
+          <div class="metric-row">
+            <div class="metric"><small>竞争变化</small><strong>竞品加速AI营销布局</strong></div>
+            <div class="metric"><small>触点变化</small><strong>天猫、抖音、线下、小程序割裂</strong></div>
+            <div class="metric"><small>运营变化</small><strong>精细化与个性化成为标配</strong></div>
+            <div class="metric"><small>组织变化</small><strong>人与AI协作进入零售日常</strong></div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer"><span>AI不是“锦上添花”，而是下一阶段会员运营基础设施</span><span>03</span></footer>
+    </section>
+
+    <section class="slide" data-title="行业趋势">
+      <header class="kicker">Market Signals</header>
+      <div class="content">
+        <div class="card-grid">
+          <div class="card">
+            <span class="big-number">01</span>
+            <h3>精准营销成为行业标配</h3>
+            <p>从活动经验、单点投放，升级为基于人群、场景和生命周期的智能决策。</p>
+          </div>
+          <div class="card">
+            <span class="big-number">02</span>
+            <h3>用户生命周期管理AI化</h3>
+            <p>识别新客、活跃、沉睡、流失风险和高价值人群，形成差异化触达策略。</p>
+          </div>
+          <div class="card">
+            <span class="big-number">03</span>
+            <h3>内容与投放响应速度重构</h3>
+            <p>AI生图、生视频与合规审核缩短素材周期，让营销节奏更接近热点速度。</p>
+          </div>
+        </div>
+      </div>
+      <footer class="footer"><span>结论：越早建立数据与AI闭环，越早获得复利</span><span>04</span></footer>
+    </section>
+
+    <section class="slide" data-title="业务痛点">
+      <header class="kicker">PUMA Pain Points</header>
+      <div class="content matrix">
+        <div class="matrix-row head">
+          <div>痛点领域</div>
+          <div>当前问题</div>
+          <div>业务影响</div>
+        </div>
+        <div class="matrix-row">
+          <div>人群洞察不足</div>
+          <div>缺少CDP与完整行为数据，用户画像不够立体。</div>
+          <div>策略缺乏数据支撑，转化效率和复购提升受限。</div>
+        </div>
+        <div class="matrix-row">
+          <div>运营效率受限</div>
+          <div>全域会员运营依赖人工，触点多、任务重。</div>
+          <div>难以规模化做到精细化运营和个性化触达。</div>
+        </div>
+        <div class="matrix-row">
+          <div>决策依据薄弱</div>
+          <div>外部数据赋能不足，品牌、投放、采购更多靠经验。</div>
+          <div>响应市场变化较慢，容易错失趋势与商机。</div>
+        </div>
+        <div class="matrix-row">
+          <div>内容生产效率</div>
+          <div>营销素材产出周期长，AI生图需求尚未满足。</div>
+          <div>活动响应慢，热点承接和多版本测试能力不足。</div>
+        </div>
+      </div>
+      <footer class="footer"><span>AI的价值要先对准真实业务约束</span><span>05</span></footer>
+    </section>
+
+    <section class="slide dark" data-title="机会地图">
+      <header class="kicker">Opportunity Map</header>
+      <div class="content split">
+        <div class="stack">
+          <h2>两条主线：让决策更准，让运营更快。</h2>
+          <p class="lead">数据智能体负责把“看不清”变成可解释的洞察；营销Agent负责把“做不过来”变成自动化执行。</p>
+        </div>
+        <div class="card-grid two">
+          <div class="card">
+            <span class="tag">Data-driven Decision</span>
+            <h3>数据驱动决策</h3>
+            <p>用户画像洞察、人群趋势预测、代言人选择支持、品牌战略与采购决策支持。</p>
+          </div>
+          <div class="card">
+            <span class="tag">Marketing Efficiency</span>
+            <h3>运营效率飞跃</h3>
+            <p>全域会员智能运营、一客一策精准营销、AI自动圈选人群、营销内容生成。</p>
+          </div>
+          <div class="card">
+            <span class="tag">Content Velocity</span>
+            <h3>内容生产提速</h3>
+            <p>活动KV、社媒素材、短视频脚本、投放版本快速生成，并加入合规审核。</p>
+          </div>
+          <div class="card">
+            <span class="tag">People Enablement</span>
+            <h3>员工与终端赋能</h3>
+            <p>导购AI助手、虚拟人培训、学练评管闭环，让零售终端更快复制最佳实践。</p>
+          </div>
+        </div>
+      </div>
+      <footer class="footer"><span>从“工具提效”升级为“经营系统升级”</span><span>06</span></footer>
+    </section>
+
+    <section class="slide" data-title="方案全景">
+      <header class="kicker">Solution Architecture</header>
+      <div class="content architecture">
+        <div class="layer-box">
+          <div class="layer"><b>数据应用层</b><span>洞察看板 | 策略建议 | 人群运营 | 内容生成</span></div>
+          <div class="layer"><b>AI引擎中台</b><span>Data Agent | Marketing Agent | HI Agent</span></div>
+          <div class="layer"><b>数据底座</b><span>CRM会员数据 | 行为数据 | 公域趋势 | 企业知识</span></div>
+        </div>
+        <div class="usecase-map">
+          <div class="usecase"><b>智能数据问答</b><p class="text">用自然语言查询会员表现、活动效果和人群变化。</p></div>
+          <div class="usecase"><b>深度洞察研究</b><p class="text">自动生成用户画像、趋势解释和可行动建议。</p></div>
+          <div class="usecase"><b>一客一策引擎</b><p class="text">根据人群特征和意图动态匹配触达策略。</p></div>
+          <div class="usecase"><b>公域营销洞察</b><p class="text">补充市场趋势、竞品动向与内容热点情报。</p></div>
+        </div>
+      </div>
+      <footer class="footer"><span>核心价值：把现有会员数据转化为可执行的业务洞察</span><span>07</span></footer>
+    </section>
+
+    <section class="slide" data-title="重点场景">
+      <header class="kicker">Priority Scenarios</header>
+      <div class="content card-grid four">
+        <div class="card">
+          <span class="tag">CRM</span>
+          <h3>会员精细化管理</h3>
+          <p>沉淀统一画像，识别高价值、新客、沉睡和流失风险人群。</p>
+        </div>
+        <div class="card">
+          <span class="tag">Growth</span>
+          <h3>自动化人群分群</h3>
+          <p>用AI圈选可转化人群，并输出触达理由和策略建议。</p>
+        </div>
+        <div class="card">
+          <span class="tag">Campaign</span>
+          <h3>营销策略执行</h3>
+          <p>跨天猫、抖音、线下、小程序形成差异化触达和效果追踪。</p>
+        </div>
+        <div class="card">
+          <span class="tag">Creative</span>
+          <h3>AI内容创作</h3>
+          <p>快速产出活动素材、视觉版本和短视频内容，支持多轮测试。</p>
+        </div>
+      </div>
+      <footer class="footer"><span>先聚焦最接近彪马当前需求的可落地场景</span><span>08</span></footer>
+    </section>
+
+    <section class="slide dark" data-title="案例参照">
+      <header class="kicker">Reference Cases</header>
+      <div class="content case-strip">
+        <div class="case">
+          <span class="tag">鞋服行业</span>
+          <h3>头部运动品牌</h3>
+          <p>以CDP+BI方案支持会员精细化运营，提升活动分析与人群管理能力。</p>
+          <strong>会员运营基础设施</strong>
+        </div>
+        <div class="case">
+          <span class="tag">竞品信号</span>
+          <h3>李宁 / 阿迪等</h3>
+          <p>AI能力已进入图片视频生成、用户洞察和营销策略等场景。</p>
+          <strong>竞争窗口正在收窄</strong>
+        </div>
+        <div class="case">
+          <span class="tag">消费零售</span>
+          <h3>线上行为到商品优化</h3>
+          <p>从小程序行为分析，到用户运营优化，再到商品建议，形成闭环。</p>
+          <strong>数据到决策闭环</strong>
+        </div>
+        <div class="case">
+          <span class="tag">高度相关</span>
+          <h3>五粮液会员管理</h3>
+          <p>CDP+GMP支撑会员管理、智能分群、自动化营销与效果追踪。</p>
+          <strong>可作为POC参照</strong>
+        </div>
+      </div>
+      <footer class="footer"><span>案例价值：证明路径可行，降低决策不确定性</span><span>09</span></footer>
+    </section>
+
+    <section class="slide" data-title="落地路径">
+      <header class="kicker">Roadmap</header>
+      <div class="content stack">
+        <h2>推荐路径：POC验证 → 项目立项 → 分期建设 → 全域运营</h2>
+        <div class="flow">
+          <div class="flow-step">
+            <b>阶段一 | 1-2个月</b>
+            <h3>POC验证</h3>
+            <p>选取部分会员数据进行画像对撞，输出人群洞察和营销机会分析。</p>
+          </div>
+          <div class="flow-step">
+            <b>阶段二</b>
+            <h3>项目立项</h3>
+            <p>基于POC成果明确优先级、预算、ROI口径和系统对接范围。</p>
+          </div>
+          <div class="flow-step">
+            <b>阶段三</b>
+            <h3>分期建设</h3>
+            <p>搭建数据底座、AI Agent能力和业务应用，按场景逐步上线。</p>
+          </div>
+          <div class="flow-step">
+            <b>阶段四</b>
+            <h3>全域运营</h3>
+            <p>覆盖多渠道会员运营、营销自动化、内容生成和持续优化。</p>
+          </div>
+        </div>
+      </div>
+      <footer class="footer"><span>合作原则：按需采买，先验证后扩展</span><span>10</span></footer>
+    </section>
+
+    <section class="slide" data-title="预期收益">
+      <header class="kicker">Expected Impact</header>
+      <div class="content">
+        <div class="matrix">
+          <div class="matrix-row head">
+            <div>维度</div>
+            <div>预期效果</div>
+            <div>衡量指标</div>
+          </div>
+          <div class="matrix-row">
+            <div>运营效率</div>
+            <div>减少重复性人工工作，提升CRM与营销团队人效。</div>
+            <div>任务处理时长缩短、运营人效提升比例。</div>
+          </div>
+          <div class="matrix-row">
+            <div>营销转化</div>
+            <div>精准圈选人群并匹配策略，提升转化率和ROI。</div>
+            <div>转化率、ARPU、复购率、活动ROI。</div>
+          </div>
+          <div class="matrix-row">
+            <div>决策质量</div>
+            <div>以数据驱动替代单纯经验判断，降低试错成本。</div>
+            <div>决策响应速度、活动成功率、洞察采纳率。</div>
+          </div>
+          <div class="matrix-row">
+            <div>内容效率</div>
+            <div>AI辅助素材生成，缩短创意生产和多版本测试周期。</div>
+            <div>内容产出量、制作周期缩短比例。</div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer"><span>POC阶段建议先锁定2-3个核心指标进行验证</span><span>11</span></footer>
+    </section>
+
+    <section class="slide dark" data-title="行动建议">
+      <header class="kicker">Next Actions</header>
+      <div class="content action-grid">
+        <div class="action-list">
+          <div class="action">
+            <div>
+              <h3>启动POC测试</h3>
+              <p>选定人群范围，进行数据画像对撞分析，2周内形成第一版洞察结论。</p>
+            </div>
+          </div>
+          <div class="action">
+            <div>
+              <h3>完成内部对齐</h3>
+              <p>明确AI项目战略定位，评估今年立项或纳入明年战略的预算路径。</p>
+            </div>
+          </div>
+          <div class="action">
+            <div>
+              <h3>组建联合团队</h3>
+              <p>CRM团队、IT部门与字节方案团队建立三方工作机制。</p>
+            </div>
+          </div>
+          <div class="action">
+            <div>
+              <h3>建立月度同步</h3>
+              <p>以CEO层面关注的业务指标为牵引，持续跟踪数据洞察成果。</p>
+            </div>
+          </div>
+        </div>
+        <div class="decision-box">
+          <span class="tag">Decision Request</span>
+          <strong>建议今天确认：是否进入POC准备阶段。</strong>
+          <p>POC是低风险、高信息量的第一步。它可以帮助彪马在正式投入前，看见真实人群洞察、营销机会和项目ROI假设。</p>
+        </div>
+      </div>
+      <footer class="footer"><span>从一次验证开始，把AI变成可衡量的业务增长能力</span><span>12</span></footer>
+    </section>
+  </main>
+
+  <div class="controls" aria-label="幻灯片控制">
+    <button class="nav-btn" id="prev" type="button" aria-label="上一页">‹</button>
+    <button class="nav-btn" id="next" type="button" aria-label="下一页">›</button>
+  </div>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const progressBar = document.getElementById("progressBar");
+    const prevButton = document.getElementById("prev");
+    const nextButton = document.getElementById("next");
+    let current = 0;
+
+    function showSlide(index) {
+      current = Math.max(0, Math.min(index, slides.length - 1));
+      slides.forEach((slide, slideIndex) => {
+        slide.classList.toggle("active", slideIndex === current);
+      });
+      progressBar.style.width = `${((current + 1) / slides.length) * 100}%`;
+      document.title = `${String(current + 1).padStart(2, "0")} / ${slides.length} - ${slides[current].dataset.title}`;
+      prevButton.disabled = current === 0;
+      nextButton.disabled = current === slides.length - 1;
+    }
+
+    function nextSlide() {
+      showSlide(current + 1);
+    }
+
+    function prevSlide() {
+      showSlide(current - 1);
+    }
+
+    prevButton.addEventListener("click", prevSlide);
+    nextButton.addEventListener("click", nextSlide);
+
+    document.addEventListener("keydown", (event) => {
+      if (["ArrowRight", "PageDown", " "].includes(event.key)) {
+        event.preventDefault();
+        nextSlide();
+      }
+      if (["ArrowLeft", "PageUp"].includes(event.key)) {
+        event.preventDefault();
+        prevSlide();
+      }
+      if (event.key === "Home") {
+        showSlide(0);
+      }
+      if (event.key === "End") {
+        showSlide(slides.length - 1);
+      }
+    });
+
+    showSlide(0);
+  </script>
+</body>
+</html>
